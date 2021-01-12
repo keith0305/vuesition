@@ -1,0 +1,78 @@
+<!-- Accepted transitionConfigCSS:
+	{
+		'--scaleX': '0',
+	}
+-->
+<template>
+	<component
+		:is="componentType"
+		:tag="tag"
+		v-bind="$attrs"
+		v-on="hooks"
+		enter-active-class="zoomInX"
+		move-class="zoom-move"
+		leave-active-class="zoomOutX"
+	>
+		<slot></slot>
+	</component>
+</template>
+
+<script>
+import { baseTransition } from '../mixins/baseTransition.js';
+
+export default {
+	name: 'zoom-x-transition',
+	props: {
+		styles: {
+			type: Object,
+			default: () => {
+				return {
+					'animation-fill-mode': 'both',
+					'animation-timing-function': 'cubic-bezier(.55,0,.1,1)',
+				};
+			},
+		},
+	},
+	mixins: [baseTransition],
+};
+</script>
+
+<style>
+.zoom-move {
+	transition: transform .3s ease-out;
+}
+
+@keyframes zoomInX {
+	from {
+		opacity: 0;
+		transform: scaleX(var(--scaleX, 0));
+	}
+
+	50% {
+		opacity: 1;
+	}
+}
+
+.zoomInX {
+	animation-name: zoomInX;
+}
+
+@keyframes zoomOutX {
+	from {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+		transform: scaleX(var(--scaleX, 0));
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+.zoomOutX {
+	animation-name: zoomOutX;
+}
+</style>

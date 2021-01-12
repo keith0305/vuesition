@@ -1,0 +1,75 @@
+<!-- Accepted transitionConfigCSS:
+	{
+		'--translateY': '-15px',
+	}
+-->
+<template>
+	<component
+		:is="componentType"
+		:tag="tag"
+		type="animation"
+		v-bind="$attrs"
+		v-on="hooks"
+		enter-active-class="slideYIn"
+		move-class="slide-move"
+		leave-active-class="slideYOut"
+	>
+		<slot></slot>
+	</component>
+</template>
+
+<script>
+import { baseTransition } from '../mixins/baseTransition.js';
+
+export default {
+	name: 'slide-y-up-transition',
+	mixins: [baseTransition],
+	props: {
+		styles: {
+			type: Object,
+			default: () => {
+				return {
+					'animation-fill-mode': 'both',
+					'animation-timing-function': 'cubic-bezier(.25,.8,.50,1)',
+				};
+			},
+		},
+	},
+};
+</script>
+
+<style>
+.slide-move {
+	transition: transform .3s;
+}
+
+@keyframes slideYIn {
+	from {
+		opacity: 0;
+		transform: translateY(var(--translateY, -15px));
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.slideYIn {
+	animation-name: slideYIn;
+}
+
+@keyframes slideYOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(var(--translateY, -15px));
+	}
+}
+
+.slideYOut {
+	animation-name: slideYOut;
+}
+</style>
